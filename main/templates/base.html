@@ -23,6 +23,9 @@
             <li class="nav-item {% if request.path == "/" %}active{% endif %}">
                 <a class="nav-link" href="/">Home</a>
             </li>
+            <li class="nav-item {% if request.path == "/signup/" %}active{% endif %}">
+                <a class="nav-link" href="/signup/">Register</a>
+            </li>
             <li class="nav-item {% if request.path == "/products/all/" %}active{% endif %}">
                 <a class="nav-link" href="/products/all/">Products</a>
             </li>

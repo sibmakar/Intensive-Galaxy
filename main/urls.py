@@ -17,4 +17,5 @@ urlpatterns = [
         views.ProductDetailView.as_view(),
         name="product",
     ),
+    path("signup/", views.SignUpView.as_view(), name="signup"),
 ]
