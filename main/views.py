@@ -1,11 +1,20 @@
 import logging
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
-from django.views.generic import FormView, ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import (
+    FormView,
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from django.shortcuts import get_object_or_404
 
 from .forms import UserCreationForm
-from .models import Product, ProductTag
+from .models import Product, ProductTag, Address
 from . import forms
 
 logger = logging.getLogger(__name__)
@@ -68,3 +77,43 @@ class ProductListView(ListView):
 class ProductDetailView(DetailView):
     template_name = "product_detail.html"
     model = Product
+
+
+class AddressListView(LoginRequiredMixin, ListView):
+    model = Address
+    template_name = "address_list.html"
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+
+class AddressCreateView(LoginRequiredMixin, CreateView):
+    model = Address
+    template_name = "address_form.html"
+    fields = ["name", "address1", "address2", "pin_code", "city", "country"]
+    success_url = reverse_lazy("address_list")
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.user = self.request.user
+        obj.save()
+        return super(AddressCreateView, self).form_valid(form)
+
+
+class AddressUpdateView(LoginRequiredMixin, UpdateView):
+    model = Address
+    template_name = "address_update.html"
+    fields = ["name", "address1", "address2", "pin_code", "city", "country"]
+    success_url = reverse_lazy("address_list")
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+
+class AddressDeleteView(LoginRequiredMixin, DeleteView):
+    model = Address
+    template_name = "address_confirm_delete.html"
+    success_url = reverse_lazy("address_list")
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)

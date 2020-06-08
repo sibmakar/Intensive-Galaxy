@@ -93,3 +93,47 @@ class TestSignUpView(TestCase):
         self.assertTrue(User.objects.filter(email="user@domain.com").exists())
         self.assertTrue(auth.get_user(self.client).is_authenticated)
         mock_send.asset_called_once()
+
+
+class TestAddressListView(TestCase):
+    def test_address_list_page_returns_only_user_owned(self):
+        user1 = models.User.objects.create_user("user1", "pw432joij")
+        user2 = models.User.objects.create_user("user2", "pw432joij")
+        models.Address.objects.create(
+            user=user1,
+            name="john kimball",
+            address1="flat 2",
+            address2="12 Stralz avenue",
+            city="Washington",
+            country="us",
+        )
+        models.Address.objects.create(
+            user=user2,
+            name="marc kimball",
+            address1="123 Deacon road",
+            city="Washington",
+            country="us",
+        )
+
+        self.client.force_login(user2)
+        response = self.client.get(reverse("address_list"))
+        self.assertEqual(response.status_code, 200)
+
+        address_list = models.Address.objects.filter(user=user2)
+        self.assertEqual(list(response.context["object_list"]), list(address_list))
+
+
+class TestAddressCreateView(TestCase):
+    def test_user_create_works(self):
+        user1 = models.User.objects.create_user("user1", "pw432joij")
+        post_data = {
+            "name": "john kercher",
+            "address1": "1 av st",
+            "address2": "",
+            "zip_code": "MA12GS",
+            "city": "Manchester",
+            "country": "uk",
+        }
+        self.client.force_login(user1)
+        self.client.post(reverse("address_create"), post_data)
+        # self.assertTrue(models.Address.objects.filter(user=user1).exists())
