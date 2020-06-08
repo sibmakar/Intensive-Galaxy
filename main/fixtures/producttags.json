@@ -1,0 +1,79 @@
+[
+    {
+        "model": "main.producttag",
+        "fields": {
+            "date_created": "2020-06-08T04:09:51.275Z",
+            "date_updated": "2020-06-08T04:09:51.275Z",
+            "name": "Fiction",
+            "slug": "fiction",
+            "description": "My tag description",
+            "active": true
+        }
+    },
+    {
+        "model": "main.producttag",
+        "fields": {
+            "date_created": "2020-06-08T04:18:12.358Z",
+            "date_updated": "2020-06-08T04:18:12.358Z",
+            "name": "Romance",
+            "slug": "romance",
+            "description": "",
+            "active": true
+        }
+    },
+    {
+        "model": "main.producttag",
+        "fields": {
+            "date_created": "2020-06-08T04:18:24.130Z",
+            "date_updated": "2020-06-08T04:18:24.130Z",
+            "name": "Drama",
+            "slug": "drama",
+            "description": "",
+            "active": true
+        }
+    },
+    {
+        "model": "main.producttag",
+        "fields": {
+            "date_created": "2020-06-08T04:18:31.121Z",
+            "date_updated": "2020-06-08T04:18:31.121Z",
+            "name": "Open Source",
+            "slug": "open-source",
+            "description": "",
+            "active": true
+        }
+    },
+    {
+        "model": "main.producttag",
+        "fields": {
+            "date_created": "2020-06-08T04:18:39.922Z",
+            "date_updated": "2020-06-08T04:18:39.922Z",
+            "name": "Team Work",
+            "slug": "team-work",
+            "description": "",
+            "active": true
+        }
+    },
+    {
+        "model": "main.producttag",
+        "fields": {
+            "date_created": "2020-06-08T04:18:47.397Z",
+            "date_updated": "2020-06-08T04:18:47.397Z",
+            "name": "Finance",
+            "slug": "finance",
+            "description": "",
+            "active": true
+        }
+    },
+    {
+        "model": "main.producttag",
+        "fields": {
+            "date_created": "2020-06-08T04:18:56.944Z",
+            "date_updated": "2020-06-08T04:18:56.944Z",
+            "name": "Science Fiction",
+            "slug": "science-fiction",
+            "description": "",
+            "active": true
+        }
+    }
+]
