@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Product, ProductImage, ProductTag
+from .models import Product, ProductImage, ProductTag, User
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
 
 @admin.register(Product)
@@ -36,3 +37,30 @@ class ProductImageAdmin(admin.ModelAdmin):
 
     def product_name(self, obj):
         return obj.product.name
+
+
+@admin.register(User)
+class UserAdmin(DjangoUserAdmin):
+    fieldsets = (
+        (None, {"fields": ("email", "password")}),
+        ("Personal info", {"fields": ("first_name", "last_name")}),
+        (
+            "Permissions",
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
+        ("Important dates", {"fields": ("last_login", "date_joined")}),
+    )
+    add_fieldsets = (
+        (None, {"classes": ("wide",), "fields": ("email", "password1", "password2")}),
+    )
+    list_display = ("email", "first_name", "last_name", "is_staff")
+    search_fields = ("email", "first_name", "last_name")
+    ordering = ("email",)

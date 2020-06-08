@@ -1,7 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-from main.managers import ActiveManager, ProductTagManager
+from django.contrib.auth.models import (
+    AbstractUser,
+    BaseUserManager,
+)
+from main.managers import ActiveManager, ProductTagManager, UserManager
 
 
 class TimeStampedModel(models.Model):
@@ -15,6 +18,15 @@ class TimeStampedModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class User(AbstractUser):
+    username = None
+    email = models.EmailField("email address", unique=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+    objects = UserManager()
 
 
 class ProductTag(TimeStampedModel):
