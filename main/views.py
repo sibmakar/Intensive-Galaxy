@@ -2,7 +2,8 @@ import logging
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic import (
     FormView,
     ListView,
@@ -14,7 +15,7 @@ from django.views.generic import (
 from django.shortcuts import get_object_or_404
 
 from .forms import UserCreationForm
-from .models import Product, ProductTag, Address
+from .models import Product, ProductTag, Address, Cart, ProductInCart
 from . import forms
 
 logger = logging.getLogger(__name__)
@@ -117,3 +118,33 @@ class AddressDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
+
+
+def add_to_cart(request):
+    """
+    Method to add products to the cart
+
+    Parameters
+    ----------
+    request
+
+    Returns
+    -------
+
+    """
+    product = get_object_or_404(Product, pk=request.GET.get("product_id"))
+    cart = request.cart
+    if not cart:
+        if request.user.is_authenticated:
+            user = request.user
+        else:
+            user = None
+        cart = Cart.objects.create(user=user)
+        request.session["cart_id"] = cart.id
+    cart_in_product, created = ProductInCart.objects.get_or_create(
+        cart=cart, product=product
+    )
+    if not created:
+        cart_in_product += 1
+        cart_in_product.save()
+    return HttpResponseRedirect(reverse("product", args=product.slug))

@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser, BaseUserManager
@@ -110,3 +111,27 @@ class Address(TimeStampedModel):
                 self.country,
             ]
         )
+
+
+class Cart(TimeStampedModel):
+    OPEN = 10
+    SUBMITTED = 20
+    STATUSES = ((OPEN, "Open"), (SUBMITTED, "Submitted"))
+
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=True, null=True)
+    status = models.IntegerField(choices=STATUSES, default=OPEN)
+
+    def is_empty(self):
+        return self.productincart_set.all().count() == 0
+
+    def count(self):
+        return sum(i.quantity for i in self.productincart_set.all())
+
+    def __str__(self):
+        return f"{self.user.first_name}'s Cart"
+
+
+class ProductInCart(TimeStampedModel):
+    cart = models.ForeignKey(to=Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])

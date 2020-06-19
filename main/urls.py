@@ -35,4 +35,5 @@ urlpatterns = [
         views.AddressDeleteView.as_view(),
         name="address_delete",
     ),
+    path("add_to_cart/", views.add_to_cart, name="add_to_cart"),
 ]
