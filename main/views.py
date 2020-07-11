@@ -134,7 +134,7 @@ def add_to_cart(request):
     """
     product = get_object_or_404(Product, pk=request.GET.get("product_id"))
     cart = request.cart
-    if not cart:
+    if not request.cart:
         if request.user.is_authenticated:
             user = request.user
         else:
@@ -145,6 +145,6 @@ def add_to_cart(request):
         cart=cart, product=product
     )
     if not created:
-        cart_in_product += 1
+        cart_in_product.quantity += 1
         cart_in_product.save()
-    return HttpResponseRedirect(reverse("product", args=product.slug))
+    return HttpResponseRedirect(reverse("product", args=(product.slug,)))
