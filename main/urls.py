@@ -36,4 +36,5 @@ urlpatterns = [
         name="address_delete",
     ),
     path("add_to_cart/", views.add_to_cart, name="add_to_cart"),
+    path("cart/", views.manage_cart, name="cart"),
 ]

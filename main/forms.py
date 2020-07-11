@@ -4,7 +4,10 @@ import logging
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm as DjangoUserCreationForm
 from django.contrib.auth.forms import UsernameField
-from . import models
+from django.forms import inlineformset_factory
+
+from . import models, widgets
+from .models import Cart, ProductInCart
 
 logger = logging.getLogger(__name__)
 
@@ -67,3 +70,12 @@ class AuthenticationForm(forms.Form):
 
     def get_user(self):
         return self.user
+
+
+CartLineFormSet = inlineformset_factory(
+    Cart,
+    ProductInCart,
+    fields=("quantity",),
+    extra=0,
+    widgets={"quantity": widgets.PlusMinusNumberInput()},
+)
