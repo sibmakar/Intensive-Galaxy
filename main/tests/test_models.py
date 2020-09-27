@@ -1,44 +1,24 @@
 from decimal import Decimal
 from django.test import TestCase
 from main import models
+from main.tests.factories import ProductFactory, UserFactory, AddressFactory
 
 
 class TestProduct(TestCase):
     def test_active_manager_works(self):
-        models.Product.objects.create(
-            name="The cathedral and the bazaar", price=Decimal("10.00")
-        )
-        models.Product.objects.create(name="Pride and Prejudice", price=Decimal("2.00"))
-        models.Product.objects.create(
-            name="A Tale of Two Cities", price=Decimal("2.00"), active=False
-        )
+        ProductFactory.create_batch(2, active=True)
+        ProductFactory(active=False)
+
         self.assertEqual(len(models.Product.objects.active()), 2)
 
 
 class TestCart(TestCase):
     def test_create_order_works(self):
-        p1 = models.Product.objects.create(
-            name="The cathedral and the bazaar",
-            price=Decimal("10.00"),
-        )
-        p2 = models.Product.objects.create(
-            name="Pride and Prejudice", price=Decimal("2.00")
-        )
-        user1 = models.User.objects.create_user("user1", "pw432joij")
-        billing = models.Address.objects.create(
-            user=user1,
-            name="John Kimball",
-            address1="127 Strudel road",
-            city="London",
-            country="uk",
-        )
-        shipping = models.Address.objects.create(
-            user=user1,
-            name="John Kimball",
-            address1="123 Deacon road",
-            city="London",
-            country="uk",
-        )
+        p1 = ProductFactory()
+        p2 = ProductFactory()
+        user1 = UserFactory()
+        billing = AddressFactory(user=user1)
+        shipping = AddressFactory(user=user1)
         cart = models.Cart.objects.create(user=user1)
         models.ProductInCart.objects.create(cart=cart, product=p1)
         models.ProductInCart.objects.create(cart=cart, product=p2)
@@ -51,8 +31,8 @@ class TestCart(TestCase):
         order.refresh_from_db()
 
         self.assertEqual(order.user, user1)
-        self.assertEqual(order.billing_address1, "127 Strudel road")
-        self.assertEqual(order.shipping_address1, "123 Deacon road")
+        self.assertEqual(order.billing_address1, billing.address1)
+        self.assertEqual(order.shipping_address1, shipping.address1)
 
         self.assertEqual(order.lines.all().count(), 2)
         lines = order.lines.all()

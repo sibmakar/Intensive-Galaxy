@@ -46,11 +46,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third party
+    "django_extensions",
+    "debug_toolbar",
+    "django_tables2",
+    "widget_tweaks",
     # my apps
     "main.apps.MainConfig",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -157,3 +163,7 @@ LOGGING = {
         "booktime": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
     },
 }
+
+INTERNAL_IPS = ["127.0.0.1"]
+
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap.html"
