@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django_tables2",
     "widget_tweaks",
     "rest_framework",
+    "channels",
     # my apps
     "main.apps.MainConfig",
 ]
@@ -87,6 +88,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "BookTime.wsgi.application"
+ASGI_APPLICATION = "BookTime.routing.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

@@ -220,6 +220,10 @@ class Order(TimeStampedModel):
     shipping_city = models.CharField(max_length=60)
     shipping_country = models.CharField(max_length=3)
 
+    last_spoken_to = models.ForeignKey(
+        User, null=True, related_name="cs_chats", on_delete=models.SET_NULL
+    )
+
     def __str__(self):
         return f"{self.user.first_name}'s Order"
 

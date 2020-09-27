@@ -54,4 +54,5 @@ urlpatterns = [
         name="address_select",
     ),
     path("api/", include(router.urls)),
+    path("customer-service/<int:order_id>/", views.room, name="cs_chat"),
 ]
