@@ -1,0 +1,36 @@
+[
+    {
+        "model": "auth.group",
+        "pk": 1,
+        "fields": {
+            "name": "Dispatchers",
+            "permissions": [
+                54,
+                22
+            ]
+        }
+    },
+    {
+        "model": "auth.group",
+        "pk": 2,
+        "fields": {
+            "name": "Employees",
+            "permissions": [
+                37,
+                38,
+                39,
+                50,
+                53,
+                54,
+                55,
+                21,
+                22,
+                23,
+                29,
+                30,
+                31,
+                26
+            ]
+        }
+    }
+]

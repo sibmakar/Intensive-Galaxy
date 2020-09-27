@@ -1,7 +1,7 @@
-from factory import fuzzy
+from factory import fuzzy, SubFactory
 from factory.django import DjangoModelFactory
 
-from main.models import User, Product, Address
+from main.models import User, Product, Address, OrderLine, Order
 
 
 class UserFactory(DjangoModelFactory):
@@ -22,3 +22,15 @@ class ProductFactory(DjangoModelFactory):
 class AddressFactory(DjangoModelFactory):
     class Meta:
         model = Address
+
+
+class OrderLineFactory(DjangoModelFactory):
+    class Meta:
+        model = OrderLine
+
+
+class OrderFactory(DjangoModelFactory):
+    user = SubFactory(UserFactory)
+
+    class Meta:
+        model = Order

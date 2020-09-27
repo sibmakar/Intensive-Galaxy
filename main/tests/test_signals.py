@@ -39,7 +39,8 @@ class TestSignal(TestCase):
         models.ProductInCart.objects.create(cart=cart, product=cb, quantity=2)
         response = self.client.get(reverse("add_to_cart"), {"product_id": w.id})
         response = self.client.post(
-            reverse("login"), {"email": "user1@a.com", "password": "pw432joij"},
+            reverse("login"),
+            {"email": "user1@a.com", "password": "pw432joij"},
         )
         self.assertTrue(auth.get_user(self.client).is_authenticated)
         self.assertTrue(models.Cart.objects.filter(user=user1).exists())

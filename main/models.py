@@ -1,14 +1,12 @@
+import logging
+
 from django.contrib.auth.models import AbstractUser
-from django.core import exceptions
 from django.core.exceptions import ValidationError
-from django.core.handlers import exception
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from main.managers import ActiveManager, ProductTagManager, UserManager
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +31,22 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = UserManager()
+
+    @property
+    def is_employee(self):
+        return self.is_active and (
+            self.is_superuser
+            or self.is_staff
+            and self.groups.filter(name="Employees").exists()
+        )
+
+    @property
+    def is_dispatcher(self):
+        return self.is_active and (
+            self.is_superuser
+            or self.is_staff
+            and self.groups.filter(name="Dispatchers").exists()
+        )
 
 
 class ProductTag(TimeStampedModel):
