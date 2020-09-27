@@ -1,6 +1,15 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Product, ProductImage, ProductTag, User
+from .models import (
+    Product,
+    ProductImage,
+    ProductTag,
+    User,
+    ProductInCart,
+    Cart,
+    OrderLine,
+    Order,
+)
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
 
@@ -64,3 +73,58 @@ class UserAdmin(DjangoUserAdmin):
     list_display = ("email", "first_name", "last_name", "is_staff")
     search_fields = ("email", "first_name", "last_name")
     ordering = ("email",)
+
+
+class ProductInCartInline(admin.TabularInline):
+    model = ProductInCart
+    raw_id_fields = ("product",)
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "status", "count")
+    list_editable = ("status",)
+    list_filter = ("status",)
+    inlines = (ProductInCartInline,)
+
+
+class OrderLineInline(admin.TabularInline):
+    model = OrderLine
+    raw_id_fields = ("product",)
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "status")
+    list_editable = ("status",)
+    list_filter = ("status", "shipping_country", "date_created")
+    inlines = (OrderLineInline,)
+    fieldsets = (
+        (None, {"fields": ("user", "status")}),
+        (
+            "Billing info",
+            {
+                "fields": (
+                    "billing_name",
+                    "billing_address1",
+                    "billing_address2",
+                    "billing_pin_code",
+                    "billing_city",
+                    "billing_country",
+                )
+            },
+        ),
+        (
+            "Shipping info",
+            {
+                "fields": (
+                    "shipping_name",
+                    "shipping_address1",
+                    "shipping_address2",
+                    "shipping_pin_code",
+                    "shipping_city",
+                    "shipping_country",
+                )
+            },
+        ),
+    )

@@ -37,4 +37,14 @@ urlpatterns = [
     ),
     path("add_to_cart/", views.add_to_cart, name="add_to_cart"),
     path("cart/", views.manage_cart, name="cart"),
+    path(
+        "order/done/",
+        TemplateView.as_view(template_name="order_done.html"),
+        name="checkout_done",
+    ),
+    path(
+        "order/address_select/",
+        views.AddressSelectionView.as_view(),
+        name="address_select",
+    ),
 ]
