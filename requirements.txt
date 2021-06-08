@@ -11,7 +11,7 @@ django-widget-tweaks==1.4.8
 djangorestframework==3.11.1
 factory_boy==3.0.1
 ipython==7.16.1
-Pillow==7.1.2
+Pillow==8.2.0
 pre-commit==2.4.0
 psycopg2-binary==2.8.5
 WeasyPrint==51
